@@ -46,6 +46,7 @@ int main(int argc, char *argv[]) {
             return -1;
 		}
 	}
+	modbus_set_debug(client, 1);
 
 	// set zlac mode
 	printf("setting zlac mode to 3, RPM control\n");
@@ -74,33 +75,34 @@ int main(int argc, char *argv[]) {
 		int rpm;
 	} points[num_points];
 
-	double instruction_start;
-	double iteration_start;
+	//double instruction_start;
+	//double iteration_start;
 
 	printf("collecting data using f = %d and num_points = %d\n", atoi(argv[1]), num_points);
 	for (int i = 0; t < 20; i++) {
-		iteration_start = micros();
+		break;
+		//iteration_start = micros();
 
 		// set right wheel rpm
-		instruction_start = micros();
+		//instruction_start = micros();
 		write_register(client, 0x2089, 20 + (i * (100 - 20) / (num_points - 1)));
-		printf("write speed time:\t%lf\t", (micros() - instruction_start) / 1e6);
+		//printf("write speed time:\t%lf\t", (micros() - instruction_start) / 1e6);
 
 		// read right wheel rpm
-		instruction_start = micros();
+		//instruction_start = micros();
 		int rpm = read_register(client, 0x20AC);
-		printf("read speed time:\t%lf\t", (micros() - instruction_start) / 1e6);
+		//printf("read speed time:\t%lf\t", (micros() - instruction_start) / 1e6);
 
 		// save point
-		instruction_start = micros();
+		//instruction_start = micros();
 		points[i].time = t;
 		points[i].rpm = rpm;
-		printf("save point time:\t%lf\t", (micros() - instruction_start) / 1e6);
+		//printf("save point time:\t%lf\t", (micros() - instruction_start) / 1e6);
 
 		if (i % 100 == 0)
 			printf("time: %lf, rpm: %d, i: %d\n", t, rpm, i);
 
-		printf("iteration time:\t%lf\t%lf\n", (micros() - iteration_start) / 1e6, t);
+		//printf("iteration time:\t%lf\t%lf\n", (micros() - iteration_start) / 1e6, t);
 		t = (micros() - start_time) * 1e-6;
 	}
 
@@ -119,7 +121,7 @@ int main(int argc, char *argv[]) {
 			last_rpm = points[i].rpm;
 			last_time = points[i].time;
 		}
-		printf("time: %lf, rpm: %d\n", points[i].time, points[i].rpm);
+		//printf("time: %lf, rpm: %d\n", points[i].time, points[i].rpm);
 	}
 	average_period_of_change /= number_of_changes;
 

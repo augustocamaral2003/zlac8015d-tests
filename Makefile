@@ -5,8 +5,9 @@ all: detect_frequency
 
 detect_frequency: scripts/detect_frequency.c
 	$(CC) -o $@ $^ $(CFLAGS)
-	chomod +x detect_frequency
+	chmod +x detect_frequency
 	./detect_frequency 300
+	rm -f detect_frequency
 
 async:
 	python3 scripts/async_modbus.py
